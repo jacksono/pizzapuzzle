@@ -4,15 +4,14 @@
 
 input = open("input.txt", "rt")
 instructions = []
+contents = []
 for line in input:
     instructions.append(line.strip())
 input.close()
 rows_cols = instructions[0].split(' ')[0:2] #extracting rows and columns from the file
-contents = instructions[1:]                 #extracting the pizza contents
-for i in range(int(rows_cols[0])):          #printing the picture of the pizza
-    print(contents[i])
-    print()
-
+for line in instructions[1:]:                 #extracting the pizza contents
+    contents.append(list(line))
+print(contents)
 min_ing_per_slice = int(instructions[0].split(' ')[2])
 max_cells_per_slice = int(instructions[0].split(' ')[-1])
 
@@ -46,10 +45,28 @@ def is_slice_valid(piza_slice): #function to check a slice for min and max ingre
     else:
         return False
 
-piza_slice = one_slice(piza = contents, size =[1,3], start = [0,0])
+def replace_element(lst, pos): #replaces an elemnt in the position pos with an X 
+    #new_list = lst
+    lst[pos[0]][pos[1]] = 'X'
+    return lst
+
+def number_factors(x):#function to get factors of H which will be the potential size of the slice 
+    fact = []
+    for i in range(1, x + 1):
+        if x % i == 0:
+            fact.append(i)
+    combinations = []
+    for i in range(len(fact)):
+        combinations.append([fact[i],fact[-(i+1)]])       
+    return combinations
+
+
+
+
+piza_slice = one_slice(piza = contents, size =[2,3], start = [0,0])
 print('these are all the instructions:',instructions)
 print('these are all the contents: {}'.format(contents))
 print('these is the min ingredients per slice:',min_ing_per_slice)
 print('these are the max cells per slice:',max_cells_per_slice)
-print(piza_slice)
-print(is_slice_valid(piza_slice))
+print(replace_element(piza_slice,[1,1]))
+
