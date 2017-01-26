@@ -1,7 +1,9 @@
 #Attempting to solve the pizza problem for the HashCode competition 2017
 #sample input file saved as input.txt
+import copy
+
 SIZE = [2,3]
-START = [0,0]
+START = [1,0]
 
 input = open("input.txt", "rt")
 instructions = []
@@ -46,8 +48,9 @@ def is_slice_valid(piza_slice): #function to check a slice for min and max ingre
         return False
 
 def replace_element(lst, pos): #replaces an elemnt in the position pos with an X 
-    new_lst = [list(x) for x in lst]
-    for row in pos:
+    #new_lst = [list(x) for x in lst]
+    new_lst = list(lst)
+    for row in pos:         #pos must be a list of lists
         new_lst[row[1]][row[0]] = 'X'
     return new_lst
 
@@ -70,17 +73,35 @@ def number_factors(x):#function to get factors of H which will be the potential 
         combinations.append([fact[i],fact[-(i+1)]])       
     return combinations
 
+def slice_whole_piza(pizza): #function to cut whole piza to valid max sized slices starting with checkng only the frst row
+    new_pizza = copy.deepcopy(pizza)
+    slices = []
+    for y in range(1):
+        for x in range(len(pizza[0])):
+            if new_pizza[y][x] != 'X' and (len(pizza[0]) - (x)) >= SIZE[0]:
+                slce = one_slice(new_pizza, SIZE, [x,y])
+                slices.append(slce)
+                replace_many_elements(new_pizza, [x, y], SIZE)
+    print(slices)
+    print('full pizza', *new_pizza,sep = '\n')
+    for slce in slices:
+        print('slice', *slce, sep = '\n')
+        print('+++++++++')
+
+    return len(slices)
+
 
 piza_slice = one_slice(piza = contents, size = SIZE, start = START)
 # print('these are all the instructions:',instructions)
 # print('these are all the contents: {}'.format(contents))
 # print('these is the min ingredients per slice:',min_ing_per_slice)
 # print('these are the max cells per slice:',max_cells_per_slice)
-print("Full pizza:\n", contents)
-print("+++++++++++++++++++++++++++++")
-print("one slice:\n", piza_slice)
-print("+++++++++++++++++++++++++++++")
-print ("Replaced sliced elements from full piza:\n",replace_many_elements(contents, START, SIZE))
-print("+++++++++++++++++++++++++++++")
-print(contents)
+# print("Full pizza:\n", contents)
+# print("+++++++++++++++++++++++++++++")
+# print("one slice:\n", piza_slice)
+# print("+++++++++++++++++++++++++++++")
+# print ("Replaced sliced elements from full piza:\n",replace_many_elements(contents, START, SIZE))
+# print("+++++++++++++++++++++++++++++")
+print(slice_whole_piza(contents))
+
 
