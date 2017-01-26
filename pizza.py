@@ -1,6 +1,7 @@
 #Attempting to solve the pizza problem for the HashCode competition 2017
 #sample input file saved as input.txt
-
+SIZE = [2,3]
+START = [0,0]
 
 input = open("input.txt", "rt")
 instructions = []
@@ -11,7 +12,6 @@ input.close()
 rows_cols = instructions[0].split(' ')[0:2] #extracting rows and columns from the file
 for line in instructions[1:]:                 #extracting the pizza contents
     contents.append(list(line))
-print(contents)
 min_ing_per_slice = int(instructions[0].split(' ')[2])
 max_cells_per_slice = int(instructions[0].split(' ')[-1])
 
@@ -46,9 +46,20 @@ def is_slice_valid(piza_slice): #function to check a slice for min and max ingre
         return False
 
 def replace_element(lst, pos): #replaces an elemnt in the position pos with an X 
-    #new_list = lst
-    lst[pos[0]][pos[1]] = 'X'
-    return lst
+    new_lst = list(lst)
+    new_lst[pos[1]][pos[0]] = 'X'
+    return new_lst
+
+def replace_many_elements(lst,start, size): #replaces many elements of lst depending on strt and size
+    indexes = []
+    for row in range(size[1]):
+        for i in range(size[0]):
+            index = [start[0] + i, start[1] + row]
+            indexes.append(index)
+    for row in indexes:
+        replaced_list = replace_element(lst, row)
+    return replaced_list
+
 
 def number_factors(x):#function to get factors of H which will be the potential size of the slice 
     fact = []
@@ -60,13 +71,28 @@ def number_factors(x):#function to get factors of H which will be the potential 
         combinations.append([fact[i],fact[-(i+1)]])       
     return combinations
 
+# def cut_one_slice(piza):
+#     size = number_factors(max_cells_per_slice)[1]
+#     piza_slice = one_slice(piza, size , [0,0])
+#     if  is_slice_valid(piza_slice):
+#         for row in range(size[1]:
+#             for  
 
 
+#         return piza
+#     return piza_slice
 
-piza_slice = one_slice(piza = contents, size =[2,3], start = [0,0])
-print('these are all the instructions:',instructions)
-print('these are all the contents: {}'.format(contents))
-print('these is the min ingredients per slice:',min_ing_per_slice)
-print('these are the max cells per slice:',max_cells_per_slice)
-print(replace_element(piza_slice,[1,1]))
+
+piza_slice = one_slice(piza = contents, size = SIZE, start = START)
+# print('these are all the instructions:',instructions)
+# print('these are all the contents: {}'.format(contents))
+# print('these is the min ingredients per slice:',min_ing_per_slice)
+# print('these are the max cells per slice:',max_cells_per_slice)
+print("Full pizza:\n", contents)
+print("+++++++++++++++++++++++++++++")
+print("one slice:\n", piza_slice)
+print("+++++++++++++++++++++++++++++")
+print ("Replaced sliced elements from full piza:\n",replace_many_elements(contents, START, SIZE))
+print("+++++++++++++++++++++++++++++")
+print(contents)
 
