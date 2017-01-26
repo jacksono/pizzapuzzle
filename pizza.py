@@ -46,8 +46,9 @@ def is_slice_valid(piza_slice): #function to check a slice for min and max ingre
         return False
 
 def replace_element(lst, pos): #replaces an elemnt in the position pos with an X 
-    new_lst = list(lst)
-    new_lst[pos[1]][pos[0]] = 'X'
+    new_lst = [list(x) for x in lst]
+    for row in pos:
+        new_lst[row[1]][row[0]] = 'X'
     return new_lst
 
 def replace_many_elements(lst,start, size): #replaces many elements of lst depending on strt and size
@@ -56,9 +57,7 @@ def replace_many_elements(lst,start, size): #replaces many elements of lst depen
         for i in range(size[0]):
             index = [start[0] + i, start[1] + row]
             indexes.append(index)
-    for row in indexes:
-        replaced_list = replace_element(lst, row)
-    return replaced_list
+    return replace_element(lst, indexes)
 
 
 def number_factors(x):#function to get factors of H which will be the potential size of the slice 
@@ -70,17 +69,6 @@ def number_factors(x):#function to get factors of H which will be the potential 
     for i in range(len(fact)):
         combinations.append([fact[i],fact[-(i+1)]])       
     return combinations
-
-# def cut_one_slice(piza):
-#     size = number_factors(max_cells_per_slice)[1]
-#     piza_slice = one_slice(piza, size , [0,0])
-#     if  is_slice_valid(piza_slice):
-#         for row in range(size[1]:
-#             for  
-
-
-#         return piza
-#     return piza_slice
 
 
 piza_slice = one_slice(piza = contents, size = SIZE, start = START)
