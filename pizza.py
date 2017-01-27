@@ -110,14 +110,28 @@ def possible_sizes(rows_cols): # function to extract possible slice sizes
             sizes.append([col, row])
     return sizes
 
-def size_alt(piza, start, rows_cols):# to slice in alternative sizes
-    for size in possible_sizes(rows_cols):
-        print(slice_whole_piza(piza, start, size))
-        print('***********************')
+def size_alt(rows_cols):# to generate alternative slice sizes
+    pos = possible_sizes(rows_cols)
+    options = []
+    new = []
+    n = 0
+    for size in pos:
+        options.append([size] * rows_cols[1])
+    new1 = copy.deepcopy(options[0])
+    while n < len(options[0]):
+        new1.insert(n, pos[1])
+        new.append(new1)
+        n += 2
+    opt1 = new[0][:5]
+    opt2 = new[1][1:6]
+    options.append(opt1)
+    options.append(opt2)
+    return options
+
 
 
 piza_slice = one_slice(piza = contents, size = SIZE, start = START)
 
-print(slice_whole_piza(contents, START))
-#print(size_alt(contents, START, rows_cols))
+#print(slice_whole_piza(contents, START))
+print(size_alt(rows_cols))
 
