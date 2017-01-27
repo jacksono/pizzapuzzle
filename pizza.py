@@ -10,7 +10,7 @@ contents = []
 for line in input:
     instructions.append(line.strip())
 input.close()
-rows_cols = instructions[0].split(' ')[0:2] #extracting rows and columns from the file
+rows_cols = [int(instructions[0].split(' ')[0:2][0]), int(instructions[0].split(' ')[0:2][1])] #extracting rows and columns from the file
 for line in instructions[1:]:                 #extracting the pizza contents
     contents.append(list(line))
 min_ing_per_slice = int(instructions[0].split(' ')[2])
@@ -83,6 +83,10 @@ def slice_whole_piza(pizza): #function to cut whole piza to valid max sized slic
         y += start[1]
         if y < len(pizza):
             for x in range(len(pizza[0])):
+
+
+
+
                 x += start[0]
                 if x < len(pizza[0]):
                     if new_pizza[y][x] != 'X' and (len(pizza[0]) - (x)) >= SIZE[0]  and (len(pizza) - y) >= SIZE[1]:
@@ -97,6 +101,16 @@ def slice_whole_piza(pizza): #function to cut whole piza to valid max sized slic
 
     return len(slices)
 
+def possible_sizes(rows_cols): # function to extract possible slice sizes
+    sizes= []
+    for n in range(rows_cols[1]):
+        n += 1
+        row = rows_cols[0]
+        col = n
+        if (row * col) <= max_cells_per_slice:
+            sizes.append([col, row])
+    return sizes
+
 
 piza_slice = one_slice(piza = contents, size = SIZE, start = START)
 # print('these are all the instructions:',instructions)
@@ -109,6 +123,6 @@ piza_slice = one_slice(piza = contents, size = SIZE, start = START)
 # print("+++++++++++++++++++++++++++++")
 # print ("Replaced sliced elements from full piza:\n",replace_many_elements(contents, START, SIZE))
 # print("+++++++++++++++++++++++++++++")
-print(slice_whole_piza(contents))
-
+#print(slice_whole_piza(contents))
+print(possible_sizes(rows_cols))
 
