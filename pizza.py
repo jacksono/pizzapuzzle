@@ -2,8 +2,8 @@
 #sample input file saved as input.txt
 import copy
 
-SIZE = [2,3]
-START = [1,0]
+SIZE = [5,1] #cols X rows
+START = [1,0] #
 
 input = open("input.txt", "rt")
 instructions = []
@@ -21,7 +21,7 @@ def one_slice(piza, size, start): #function to cut out one slice of any size wit
     one_slice = []                # for start coords i have used zero based coords so that the frst line is 0,0 not 1,1
 
     if size[1] > len(piza[start[1]:]) or size[0] > len(piza[0][start[0]:]): #check if slice size can fit in pizza
-        return ('Size too big for this piza')
+            return "Size too big for this portion"
 
     else:
         new_piza = piza[start[1]:]
@@ -73,16 +73,16 @@ def number_factors(x):#function to get factors of H which will be the potential 
         combinations.append([fact[i],fact[-(i+1)]])       
     return combinations
 
-def slice_whole_piza(pizza): #function to cut whole piza to valid max sized slices starting with checkng only the frst row
+def slice_whole_piza(pizza): #function to cut whole piza to valid max sized slices starting with 0,0
     new_pizza = copy.deepcopy(pizza)
     slices = []
-    for y in range(1):
+    for y in range(len(pizza)):
         for x in range(len(pizza[0])):
-            if new_pizza[y][x] != 'X' and (len(pizza[0]) - (x)) >= SIZE[0]:
-                slce = one_slice(new_pizza, SIZE, [x,y])
-                slices.append(slce)
-                replace_many_elements(new_pizza, [x, y], SIZE)
-    print(slices)
+            if new_pizza[y][x] != 'X' and (len(pizza[0]) - (x)) >= SIZE[0]  and (len(pizza) - y) >= SIZE[1]:
+                slce = one_slice(new_pizza, SIZE, [x, y])
+                if is_slice_valid(slce):
+                    slices.append(slce)
+                    replace_many_elements(new_pizza, [x, y], SIZE)
     print('full pizza', *new_pizza,sep = '\n')
     for slce in slices:
         print('slice', *slce, sep = '\n')
