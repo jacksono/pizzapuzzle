@@ -16,8 +16,8 @@ for line in instructions[1:]:                 #extracting the pizza contents
 min_ing_per_slice = int(instructions[0].split(' ')[2])
 max_cells_per_slice = int(instructions[0].split(' ')[-1])
 
-SIZE = [1,3] #cols X rows
-START = [1,0] # cols X rows
+SIZE = [2,3] #cols X rows
+START = [0,0] # cols X rows
 
 def one_slice(piza, size, start): #function to cut out one slice of any size without holes starting from anywhere
     one_slice = []                # for start coords i have used zero based coords so that the frst line is 0,0 not 1,1
@@ -75,25 +75,20 @@ def number_factors(x):#function to get factors of H which will be the potential 
         combinations.append([fact[i],fact[-(i+1)]])       
     return combinations
 
-def slice_whole_piza(pizza): #function to cut whole piza to valid max sized slices starting from any where
+def slice_whole_piza(pizza, start, size): #function to cut whole piza to valid max sized slices starting from any where
     new_pizza = copy.deepcopy(pizza)
     slices = []
-    start = [2,0]
     for y in range(len(pizza)): #nesting too much
         y += start[1]
         if y < len(pizza):
             for x in range(len(pizza[0])):
-
-
-
-
                 x += start[0]
                 if x < len(pizza[0]):
-                    if new_pizza[y][x] != 'X' and (len(pizza[0]) - (x)) >= SIZE[0]  and (len(pizza) - y) >= SIZE[1]:
-                        slce = one_slice(new_pizza, SIZE, [x, y])
+                    if new_pizza[y][x] != 'X' and (len(pizza[0]) - (x)) >= size[0]  and (len(pizza) - y) >= size[1]:
+                        slce = one_slice(new_pizza, size, [x, y])
                         if is_slice_valid(slce):
                             slices.append(slce)
-                            replace_many_elements(new_pizza, [x, y], SIZE)
+                            replace_many_elements(new_pizza, [x, y], size)
     print('full pizza', *new_pizza,sep = '\n')
     for slce in slices:
         print('slice', *slce, sep = '\n')
@@ -111,18 +106,14 @@ def possible_sizes(rows_cols): # function to extract possible slice sizes
             sizes.append([col, row])
     return sizes
 
+def size_alt(piza, start, rows_cols):# to slice in alternative sizes
+    for size in possible_sizes(rows_cols):
+        print(slice_whole_piza(piza, start, size))
+        print('***********************')
+
 
 piza_slice = one_slice(piza = contents, size = SIZE, start = START)
-# print('these are all the instructions:',instructions)
-# print('these are all the contents: {}'.format(contents))
-# print('these is the min ingredients per slice:',min_ing_per_slice)
-# print('these are the max cells per slice:',max_cells_per_slice)
-# print("Full pizza:\n", contents)
-# print("+++++++++++++++++++++++++++++")
-# print("one slice:\n", piza_slice)
-# print("+++++++++++++++++++++++++++++")
-# print ("Replaced sliced elements from full piza:\n",replace_many_elements(contents, START, SIZE))
-# print("+++++++++++++++++++++++++++++")
-#print(slice_whole_piza(contents))
-print(possible_sizes(rows_cols))
+
+#print(slice_whole_piza(contents, START, SIZE))
+print(size_alt(contents, START, rows_cols))
 
