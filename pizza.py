@@ -17,13 +17,13 @@ min_ing_per_slice = int(instructions[0].split(' ')[2])
 max_cells_per_slice = int(instructions[0].split(' ')[-1])
 
 SIZE = [1,3] #cols X rows
-START = [1,0] #
+START = [1,0] # cols X rows
 
 def one_slice(piza, size, start): #function to cut out one slice of any size without holes starting from anywhere
     one_slice = []                # for start coords i have used zero based coords so that the frst line is 0,0 not 1,1
 
     if size[1] > len(piza[start[1]:]) or size[0] > len(piza[0][start[0]:]): #check if slice size can fit in pizza
-            return "Size too big for this portion"
+            return "Size too big for this portion"                          #may not ned this check since its checked in slice_whole_pizza()
 
     else:
         new_piza = piza[start[1]:]
@@ -79,7 +79,7 @@ def slice_whole_piza(pizza): #function to cut whole piza to valid max sized slic
     new_pizza = copy.deepcopy(pizza)
     slices = []
     start = [2,0]
-    for y in range(len(pizza)):
+    for y in range(len(pizza)): #nesting too much
         y += start[1]
         if y < len(pizza):
             for x in range(len(pizza[0])):
