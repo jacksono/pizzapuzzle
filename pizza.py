@@ -75,13 +75,16 @@ def number_factors(x):#function to get factors of H which will be the potential 
         combinations.append([fact[i],fact[-(i+1)]])       
     return combinations
 
-def slice_whole_piza(pizza, start, size): #function to cut whole piza to valid max sized slices starting from any where
+def slice_whole_piza(pizza, start): #function to cut whole piza to valid max sized slices starting from any where
     new_pizza = copy.deepcopy(pizza)
     slices = []
+    index = 0
+    sizes = [[2,3],[1,3],[2,3],[1,3],[2,3]]
     for y in range(len(pizza)): #nesting too much
         y += start[1]
         if y < len(pizza):
             for x in range(len(pizza[0])):
+                size = sizes[index]
                 x += start[0]
                 if x < len(pizza[0]):
                     if new_pizza[y][x] != 'X' and (len(pizza[0]) - (x)) >= size[0]  and (len(pizza) - y) >= size[1]:
@@ -89,6 +92,7 @@ def slice_whole_piza(pizza, start, size): #function to cut whole piza to valid m
                         if is_slice_valid(slce):
                             slices.append(slce)
                             replace_many_elements(new_pizza, [x, y], size)
+                            index += 1
     print('full pizza', *new_pizza,sep = '\n')
     for slce in slices:
         print('slice', *slce, sep = '\n')
@@ -114,6 +118,6 @@ def size_alt(piza, start, rows_cols):# to slice in alternative sizes
 
 piza_slice = one_slice(piza = contents, size = SIZE, start = START)
 
-#print(slice_whole_piza(contents, START, SIZE))
-print(size_alt(contents, START, rows_cols))
+print(slice_whole_piza(contents, START))
+#print(size_alt(contents, START, rows_cols))
 
