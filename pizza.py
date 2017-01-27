@@ -16,7 +16,7 @@ for line in instructions[1:]:                 #extracting the pizza contents
 min_ing_per_slice = int(instructions[0].split(' ')[2])
 max_cells_per_slice = int(instructions[0].split(' ')[-1])
 
-SIZE = [2,3] #cols X rows
+SIZE = [1,3] #cols X rows
 START = [1,0] #
 
 def one_slice(piza, size, start): #function to cut out one slice of any size without holes starting from anywhere
@@ -75,20 +75,21 @@ def number_factors(x):#function to get factors of H which will be the potential 
         combinations.append([fact[i],fact[-(i+1)]])       
     return combinations
 
-def slice_whole_piza(pizza): #function to cut whole piza to valid max sized slices starting with y = 0, any x
+def slice_whole_piza(pizza): #function to cut whole piza to valid max sized slices starting from any where
     new_pizza = copy.deepcopy(pizza)
     slices = []
-    start = [1,1]
-    for y in range(1):
-        
-        for x in range(len(pizza[0])):
-            x += start[0]
-            if x < len(pizza[0]):
-                if new_pizza[y][x] != 'X' and (len(pizza[0]) - (x)) >= SIZE[0]  and (len(pizza) - y) >= SIZE[1]:
-                    slce = one_slice(new_pizza, SIZE, [x, y])
-                    if is_slice_valid(slce):
-                        slices.append(slce)
-                        replace_many_elements(new_pizza, [x, y], SIZE)
+    start = [2,0]
+    for y in range(len(pizza)):
+        y += start[1]
+        if y < len(pizza):
+            for x in range(len(pizza[0])):
+                x += start[0]
+                if x < len(pizza[0]):
+                    if new_pizza[y][x] != 'X' and (len(pizza[0]) - (x)) >= SIZE[0]  and (len(pizza) - y) >= SIZE[1]:
+                        slce = one_slice(new_pizza, SIZE, [x, y])
+                        if is_slice_valid(slce):
+                            slices.append(slce)
+                            replace_many_elements(new_pizza, [x, y], SIZE)
     print('full pizza', *new_pizza,sep = '\n')
     for slce in slices:
         print('slice', *slce, sep = '\n')
