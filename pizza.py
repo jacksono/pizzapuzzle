@@ -123,6 +123,7 @@ def final(piza, start, rows_cols):#ALLTOGETHER NOW
     slice_sizes = size_alt(rows_cols)
     bestcut = 0
     output = ['highest', 'cutpizza','slices', 'indxes']
+    positions = []
     for size in slice_sizes:
         slice_no, total_cells, new_pizza, slices, indexes = slice_whole_piza(piza, start, size)
         if total_cells > bestcut:
@@ -131,13 +132,17 @@ def final(piza, start, rows_cols):#ALLTOGETHER NOW
             output[2] = slices
             output[3] = indexes
             bestcut = total_cells
-    print("highest no of cells cut is : ", output[0])
-    print("the cut piza is:\n", *output[1], sep = "\n")
-    print("the indexes are:\n", *output[3], sep = "\n")
-    print("the slices are:\n")
-    for slce in output[2]:
-        print('slice', *slce, sep = '\n')
-        print('+++++++++') 
+    for ind in output[3]:
+        pos = [ind[0], ind[-1]]
+        positions.append([pos[0][-1], pos[0][0]] + [pos[1][-1], pos[1][0]])
+    # print("highest no of cells cut is : ", output[0])
+    # print("the cut piza is:\n", *output[1], sep = "\n")
+    # print("the indexes are:\n", *positions, sep = "\n")
+    # print("the slices are:\n")
+    # for slce in output[2]:
+    #     print('slice', *slce, sep = '\n')
+    #     print('+++++++++') 
+    return len(output[2]), positions
 
 
 piza_slice = one_slice(piza = contents, size = SIZE, start = START)
