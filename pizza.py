@@ -62,7 +62,7 @@ def replace_many_elements(lst,start, size): #replaces many elements of lst depen
             index = [start[0] + i, start[1] + row]
             indexes.append(index)
     #print(indexes)
-    return replace_element(lst, indexes)
+    return [replace_element(lst, indexes), indexes]
 
 
 def slice_whole_piza(pizza, start, sizes): #function to cut whole piza to valid max sized slices starting from any where
@@ -71,6 +71,7 @@ def slice_whole_piza(pizza, start, sizes): #function to cut whole piza to valid 
     index = 0
     slice_no = 0
     total_cells = 0
+    indexes = []
     for y in range(len(pizza)): #nesting too much
         y += start[1]
         if y < len(pizza):
@@ -82,18 +83,13 @@ def slice_whole_piza(pizza, start, sizes): #function to cut whole piza to valid 
                         slce = one_slice(new_pizza, size, [x, y])
                         if is_slice_valid(slce):
                             slices.append(slce)
-                            replace_many_elements(new_pizza, [x, y], size)
+                            ind = replace_many_elements(new_pizza, [x, y], size)[1]
                             index += 1
+                            indexes.append(ind)
                             slice_no += 1
                             for row in slce:
                                 total_cells += len(row)
-
-    # print('full pizza', *new_pizza,sep = '\n')
-    # for slce in slices:
-    #     print('slice', *slce, sep = '\n')
-    #     print('+++++++++') 
-
-    return [slice_no, total_cells, new_pizza, slices]
+    return [slice_no, total_cells, new_pizza, slices, indexes]
 
 def possible_sizes(rows_cols): # function to extract possible slice sizes
     sizes= []
@@ -126,16 +122,18 @@ def size_alt(rows_cols):# to generate alternative slice sizes
 def final(piza, start, rows_cols):#ALLTOGETHER NOW
     slice_sizes = size_alt(rows_cols)
     bestcut = 0
-    output = ['highest', 'cutpizza','slices']
+    output = ['highest', 'cutpizza','slices', 'indxes']
     for size in slice_sizes:
-        slice_no, total_cells, new_pizza, slices = slice_whole_piza(piza, start, size)
+        slice_no, total_cells, new_pizza, slices, indexes = slice_whole_piza(piza, start, size)
         if total_cells > bestcut:
             output[0] = total_cells
             output[1] = new_pizza
             output[2] = slices
+            output[3] = indexes
             bestcut = total_cells
     print("highest no of cells cut is : ", output[0])
     print("the cut piza is:\n", *output[1], sep = "\n")
+    print("the indexes are:\n", *output[3], sep = "\n")
     print("the slices are:\n")
     for slce in output[2]:
         print('slice', *slce, sep = '\n')
