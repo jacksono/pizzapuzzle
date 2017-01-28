@@ -79,6 +79,8 @@ def slice_whole_piza(pizza, start, sizes): #function to cut whole piza to valid 
     new_pizza = copy.deepcopy(pizza)
     slices = []
     index = 0
+    slice_no = 0
+    total_cells = 0
     for y in range(len(pizza)): #nesting too much
         y += start[1]
         if y < len(pizza):
@@ -92,16 +94,16 @@ def slice_whole_piza(pizza, start, sizes): #function to cut whole piza to valid 
                             slices.append(slce)
                             replace_many_elements(new_pizza, [x, y], size)
                             index += 1
+                            slice_no += 1
+                            for row in slce:
+                                total_cells += len(row)
 
     print('full pizza', *new_pizza,sep = '\n')
-    l = 0
     for slce in slices:
-        l += 1
         print('slice', *slce, sep = '\n')
-        print('+++++++++')
-        print(l)      
+        print('+++++++++') 
 
-    return len(slices)
+    return [slice_no, total_cells]
 
 def possible_sizes(rows_cols): # function to extract possible slice sizes
     sizes= []
@@ -133,9 +135,17 @@ def size_alt(rows_cols):# to generate alternative slice sizes
 
 def final(piza, start, rows_cols):#ALLTOGETHER NOW
     slice_sizes = size_alt(rows_cols)
+    bestcut = 0
+    bestslice = ['x']
     for size in slice_sizes:
-        slice_whole_piza(piza, start, size)
+        slice_no, total_cells = slice_whole_piza(piza, start, size)
+        print("There are {} slices of {} total cells cut".format(slice_no, total_cells))
+        if total_cells > bestcut:
+            bestslice[0] = total_cells
+            bestcut = total_cells
+
         print("**************************************************************")
+    print("highest no of cells cut is : ", bestcut)
 
 piza_slice = one_slice(piza = contents, size = SIZE, start = START)
 
