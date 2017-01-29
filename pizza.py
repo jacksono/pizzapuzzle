@@ -16,7 +16,6 @@ for line in instructions[1:]:                 #extracting the pizza contents
 min_ing_per_slice = int(instructions[0].split(' ')[2])
 max_cells_per_slice = int(instructions[0].split(' ')[-1])
 
-SIZE = [2,3] #cols X rows
 START = [0,0] # cols X rows
 
 def one_slice(piza, size, start): #function to cut out one slice of any size without holes starting from anywhere
@@ -64,28 +63,17 @@ def replace_many_elements(lst,start, size): #replaces many elements of lst depen
             indexes.append(index)
     return replace_element(lst, indexes)
 
-
-def number_factors(x):#function to get factors of H which will be the potential size of the slice 
-    fact = []
-    for i in range(1, x + 1):
-        if x % i == 0:
-            fact.append(i)
-    combinations = []
-    for i in range(len(fact)):
-        combinations.append([fact[i],fact[-(i+1)]])       
-    return combinations
-
 def slice_whole_piza(pizza, start, sizes): #function to cut whole piza to valid max sized slices starting from any where
     new_pizza = copy.deepcopy(pizza)
     slices = []
-    index = 0
     slice_no = 0
     total_cells = 0
     for y in range(len(pizza)): #nesting too much
         y += start[1]
         if y < len(pizza):
             for x in range(len(pizza[0])):
-                size = sizes[index]
+                if slice_no < rows_cols[1]:
+                    size = sizes[slice_no]
                 x += start[0]
                 if x < len(pizza[0]):
                     if new_pizza[y][x] != 'X' and (len(pizza[0]) - (x)) >= size[0]  and (len(pizza) - y) >= size[1]:
@@ -93,7 +81,6 @@ def slice_whole_piza(pizza, start, sizes): #function to cut whole piza to valid 
                         if is_slice_valid(slce):
                             slices.append(slce)
                             replace_many_elements(new_pizza, [x, y], size)
-                            index += 1
                             slice_no += 1
                             for row in slce:
                                 total_cells += len(row)
@@ -121,7 +108,7 @@ def size_alt(rows_cols):# to generate alternative slice sizes
     new = []
     n = 0
     for size in pos:
-        options.append([size] * rows_cols[1])
+        options.append([size] * 5)
     new1 = copy.deepcopy(options[0])
     while n < len(options[0]):
         new1.insert(n, pos[1])
@@ -147,8 +134,6 @@ def final(piza, start, rows_cols):#ALLTOGETHER NOW
         print("**************************************************************")
     print("highest no of cells cut is : ", bestcut)
 
-piza_slice = one_slice(piza = contents, size = SIZE, start = START)
-
-#print(slice_whole_piza(contents, START))
+print(*size_alt(rows_cols), sep = "\n")
 print(final(contents, START, rows_cols))
 
